@@ -13,7 +13,7 @@ install:
 	mkdir -p "$(BUILDPATH)"
 	$(BUILD_TOOL) $(BUILD_TOOL_FLAGS)
 	mkdir -p "$(BINARIES_FOLDER)"
-	cp "$(ROME_EXECUTABLE)" "$(BINARIES_FOLDER)/romecli”
+	cp "$(ROME_EXECUTABLE)" "$(BINARIES_FOLDER)/romecli"
 
 uninstall:
-	rm "$(BINARIES_FOLDER)/romecli”
+	rm "$(BINARIES_FOLDER)/romecli"
