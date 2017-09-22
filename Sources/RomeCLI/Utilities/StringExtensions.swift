@@ -3,7 +3,7 @@ extension String {
         let trueValues = ["true", "yes", "1"]
         let falseValues = ["false", "no", "0"]
 
-        let lowerSelf = self.lowercaseString
+        let lowerSelf = self.lowercased()
 
         if trueValues.contains(lowerSelf) {
             return true

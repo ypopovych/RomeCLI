@@ -1,28 +1,19 @@
 PREFIX?=/usr/local
-TEMPORARY_FOLDER=/tmp/RomeCLI.dst
-BUILD_TOOL=xcodebuild
-
-XCODEFLAGS=DSTROOT=$(TEMPORARY_FOLDER)
-
-ROME_EXECUTABLE=$(TEMPORARY_FOLDER)/Applications/RomeCLI.app/Contents/MacOS/RomeCLI
-FRAMEWORKS_BUNDLE=$(TEMPORARY_FOLDER)/Applications/RomeCLI.app/Contents/Frameworks/
-
+BUILDPATH?=/tmp/RomeCLI.dst
+BUILD_TOOL=swift build
+BUILD_TOOL_FLAGS=-c release --build-path "$(BUILDPATH)"
 BINARIES_FOLDER=$(PREFIX)/bin
-FRAMEWORKS_FOLDER=$(PREFIX)/Frameworks/RomeCLI
+
+ROME_EXECUTABLE=$(shell $(BUILD_TOOL) $(BUILD_TOOL_FLAGS) --show-bin-path)/romecli
 
 clean:
-	rm -rf "$(TEMPORARY_FOLDER)"
-	$(BUILD_TOOL) $(XCODEFLAGS) clean
+	rm -rf "$(BUILDPATH)"
 
 install:
-	carthage bootstrap --platform OSX
-	$(BUILD_TOOL) $(XCODEFLAGS) install
+	mkdir -p "$(BUILDPATH)"
+	$(BUILD_TOOL) $(BUILD_TOOL_FLAGS)
 	mkdir -p "$(BINARIES_FOLDER)"
-	mkdir -p "$(FRAMEWORKS_FOLDER)"
-	cp -R "$(FRAMEWORKS_BUNDLE)" "$(FRAMEWORKS_FOLDER)"
-	cp "$(ROME_EXECUTABLE)" "$(BINARIES_FOLDER)/romecli"
-	install_name_tool -add_rpath "$(FRAMEWORKS_FOLDER)" "$(BINARIES_FOLDER)/romecli"
+	cp "$(ROME_EXECUTABLE)" "$(BINARIES_FOLDER)/romecli”
 
 uninstall:
-	rm -rf "$(FRAMEWORKS_FOLDER)"
-	rm "$(BINARIES_FOLDER)/romecli"
+	rm "$(BINARIES_FOLDER)/romecli”
